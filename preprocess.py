@@ -1,8 +1,3 @@
-# SentenceTransformer holds the embedding model
-# Documentation on how to use the model to find similarity, embed,
-# and to the retrieval process
-# https://sbert.net/docs/sentence_transformer/usage/usage.html
-
 from sentence_transformers import SentenceTransformer
 import csv
 import numpy as np

@@ -3,7 +3,6 @@
 # and to the retrieval process
 # https://sbert.net/docs/sentence_transformer/usage/usage.html
 from sentence_transformers import SentenceTransformer, SimilarityFunction
-import csv
 import torch
 import numpy as np
 from preprocess import *
