@@ -2,17 +2,27 @@
 # Documentation on how to use the model to find similarity, embed,
 # and to the retrieval process
 # https://sbert.net/docs/sentence_transformer/usage/usage.html
+from sentence_transformers import SentenceTransformer, SimilarityFunction
+import csv
+import torch
+import numpy as np
+from preprocess import *
 
-from sentence_transformers import SentenceTransformer
+def get_sim(input, return_num, embedding_model, data_path="data/data.csv", embeddings_path='data/embeddings.npy'):
+    embeddings = np.load(embeddings_path)
+    data = read_data(data_path)
+    input_embedding = embedding_model.encode(input, normalize_embeddings=True)
 
-embedding_model = SentenceTransformer("BAAI/bge-large-en-v1.5")
+    similarity = embedding_model.similarity(embeddings,input_embedding)
+    similarity = torch.squeeze(similarity, dim=1)
+    
+    values, indices = torch.topk(similarity, k=return_num, largest=True)
+    output = []
+    for val, i in zip(values, indices):
+        output.append([val.item(), data[i]])
+    return output
 
-# Data after processing
-sentences = ["Cats are gray.", "dogs are gray", "cats weigh 15 lbs"]
-input = ["What color are cats?"]
-embeddings = embedding_model.encode(sentences, normalize_embeddings=True)
-input_embedding = embedding_model.encode(input, normalize_embeddings=True)
 
-similarity = embedding_model.similarity(embeddings,input_embedding)
-
-print(similarity[0:])
+if __name__ == '__main__':
+    embedding_model = SentenceTransformer("BAAI/bge-large-en-v1.5", similarity_fn_name=SimilarityFunction.DOT_PRODUCT)
+    print(get_sim("input string", 2, embedding_model))
