@@ -3,9 +3,9 @@
 # and to the retrieval process
 # https://sbert.net/docs/sentence_transformer/usage/usage.html
 
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, SimilarityFunction
 
-embedding_model = SentenceTransformer("BAAI/bge-large-en-v1.5")
+embedding_model = SentenceTransformer("BAAI/bge-large-en-v1.5", similarity_fn_name=SimilarityFunction.DOT_PRODUCT)
 
 # Data after processing
 sentences = ["Cats are gray.", "dogs are gray", "cats weigh 15 lbs"]
