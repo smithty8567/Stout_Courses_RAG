@@ -24,4 +24,4 @@ def get_sim(input, return_num, embedding_model, data_path="data/data.csv", embed
 
 if __name__ == '__main__':
     embedding_model = SentenceTransformer("BAAI/bge-large-en-v1.5", similarity_fn_name=SimilarityFunction.DOT_PRODUCT)
-    print(get_sim("input string", 2, embedding_model))
+    print(get_sim("what are good corses to take in the applied math and computer science major", 5, embedding_model, data_path="data/bulletinData.csv"))
