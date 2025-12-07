@@ -90,4 +90,4 @@ def preprocess(path="data/data.csv", output='data/majorEmbeddings.npy'):
         
 if __name__ == '__main__':
     chunk_data()
-    # preprocess(path="bulletinData.csv")
+    preprocess(path="data/bulletinData.csv")
