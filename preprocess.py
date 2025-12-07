@@ -96,5 +96,5 @@ def preprocess(path="data/data.csv", output='data/embeddings.npy'):
     np.save(output, embeddings)
         
 if __name__ == '__main__':
-    # chunk_data()
+    chunk_data()
     preprocess(path="data/bulletinData.csv")
