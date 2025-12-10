@@ -16,7 +16,8 @@ def read_data(path="data/data.csv"):
 def chunk_data(path="stout_programs.json"):
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
-    chunks = []
+    major_descriptions = []
+    major_courses = []
     course_split_num = 10
     description_check = 500
 
@@ -25,9 +26,9 @@ def chunk_data(path="stout_programs.json"):
         description = row["text"].replace("Go to program website ", '')
 
         if row["concentration"] is not None:
-
+            concentration = row["program_name"] + " (" + row["concentration"] + ")"
             if description.strip() != "":
-                chunks.append(row["program_name"] + " Description: " + description)
+                major_descriptions.append(concentration + " Description: " + description)
 
             courses_chunks = row["required_courses"].split(":.")
 
@@ -45,14 +46,14 @@ def chunk_data(path="stout_programs.json"):
                         # Cleaning leading whitespaces
                         course_chunk = course_chunk.lstrip()
                         if course_chunk.strip() != "":
-                            chunks.append(row["concentration"] + " Required Courses: " + course_chunk)
+                            major_courses.append(concentration + " Required Courses: " + course_chunk)
                 else:
                     if chunked_course.strip() != "":
-                        chunks.append(row["concentration"] + " Required Courses: " + chunked_course)
+                        major_courses.append(concentration + " Required Courses: " + chunked_course)
         else:
 
             if description.strip() != "":
-                chunks.append(row["program_name"] + " Description: " + description)
+                major_descriptions.append(row["program_name"] + " Description: " + description)
 
             courses_chunks = row["required_courses"].split(":.")
 
@@ -70,15 +71,20 @@ def chunk_data(path="stout_programs.json"):
                         # Cleaning leading whitespaces
                         course_chunk = course_chunk.lstrip()
                         if course_chunk.strip() != "":
-                            chunks.append(row["program_name"] + " Required Courses: " + course_chunk)
+                            major_courses.append(row["program_name"] + " Required Courses: " + course_chunk)
                 else:
                     if chunked_course.strip() != "":
-                        chunks.append(row["program_name"] + " Required Courses: " + chunked_course)
+                        major_courses.append(row["program_name"] + " Required Courses: " + chunked_course)
 
-        with open("data/bulletinData.csv", "w", newline="", encoding="utf-8") as f:
+        with open("data/majorCourses.csv", "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
-            for chunk in chunks:
-                writer.writerow([chunk])
+            for major_course in major_courses:
+                writer.writerow([major_course])
+
+        with open("data/majorDescriptions.csv", "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            for major_description in major_descriptions:
+                writer.writerow([major_description])
 
 
 def preprocess(path1="data/data.csv", path2="data/coursesData.csv",output1='data/embeddings.npy', output2='data/courseEmbeddings.npy'):
@@ -92,4 +98,4 @@ def preprocess(path1="data/data.csv", path2="data/coursesData.csv",output1='data
         
 if __name__ == '__main__':
     chunk_data()
-    preprocess(path1="data/bulletinData.csv")
+    preprocess(path1="data/majorDescriptions.csv", path2="data/majorCourses.csv",output1='data/majorDescriptionEmbeddings.npy', output2='data/majorCourseEmbeddings.npy')
