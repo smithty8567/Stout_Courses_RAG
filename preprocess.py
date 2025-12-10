@@ -13,14 +13,12 @@ def read_data(path="data/data.csv"):
             strings.append(string)
         return strings
 
-def chunk_data(path="bulletin2.json"):
+def chunk_data(path="stout_programs.json"):
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
-    chunking = True
     chunks = []
     course_split_num = 10
-    description_length = 200
-    description_check = 300
+    description_check = 500
 
     for row in tqdm(data, desc="Chunking data"):
         # Remove "Go to program website " from the beginning of row["text"]
@@ -82,12 +80,16 @@ def chunk_data(path="bulletin2.json"):
             for chunk in chunks:
                 writer.writerow([chunk])
 
-def preprocess(path="data/data.csv", output='data/majorEmbeddings.npy'):
+
+def preprocess(path1="data/data.csv", path2="data/coursesData.csv",output1='data/embeddings.npy', output2='data/courseEmbeddings.npy'):
     embedding_model = SentenceTransformer("BAAI/bge-large-en-v1.5")
-    strings = read_data(path)
-    embeddings = embedding_model.encode(strings, normalize_embeddings=True)
-    np.save(output, embeddings)
+    strings1 = read_data(path1)
+    strings2 = read_data(path2)
+    embeddings1 = embedding_model.encode(strings1, normalize_embeddings=True)
+    embeddings2 = embedding_model.encode(strings2, normalize_embeddings=True)
+    np.save(output1, embeddings1)
+    np.save(output2, embeddings2)
         
 if __name__ == '__main__':
     chunk_data()
-    preprocess(path="data/bulletinData.csv")
+    preprocess(path1="data/bulletinData.csv")

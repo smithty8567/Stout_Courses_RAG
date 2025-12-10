@@ -19,4 +19,4 @@ def prompt(input, prompt_path, return_num, embedding_model, data_path="data/data
     
 if __name__ == '__main__':
     embedding_model = SentenceTransformer("BAAI/bge-large-en-v1.5", similarity_fn_name=SimilarityFunction.DOT_PRODUCT)
-    print(prompt("What is a good major for using art and math", "prompts/fact.txt", 5, embedding_model, data_path="data/bulletinData.csv"))
+    print(prompt("What is the game design major at stout?", "prompts/fact.txt", 5, embedding_model, data_path="data/bulletinData.csv"))
