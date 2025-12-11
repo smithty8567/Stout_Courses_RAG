@@ -13,88 +13,79 @@ def read_data(path="data/data.csv"):
             strings.append(string)
         return strings
 
-def chunk_data(path="stout_programs.json"):
+def chunk_data(path="data/stout_programs_update.json"):
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
     major_descriptions = []
     major_courses = []
     course_split_num = 10
-    description_check = 500
+    description_check = 1250
 
     for row in tqdm(data, desc="Chunking data"):
         # Remove "Go to program website " from the beginning of row["text"]
         description = row["text"].replace("Go to program website ", '')
 
+        program_name = row["program_name"]
+
         if row["concentration"] is not None:
-            concentration = row["program_name"] + " (" + row["concentration"] + ")"
-            if description.strip() != "":
-                major_descriptions.append(concentration + " Description: " + description)
+            program_name = row["program_name"] + " (" + row["concentration"] + ")"
 
-            courses_chunks = row["required_courses"].split(":.")
+        if description.strip() != "":
+            major_descriptions.append(program_name + " Description: " + description)
 
-            for chunked_course in courses_chunks:
-                # No leading whitespace
-                chunked_course = chunked_course.lstrip()
+        courses_chunks = row["required_courses"].split("Major Studies:")
+        if len(courses_chunks) == 1:
+            courses_chunks = row["required_courses"].split("Additional concentration courses:")
 
-                if len(chunked_course) > description_check:
-                    split_courses = chunked_course.split(",")
-                    courses = []
-                    for i in range(0, len(split_courses), course_split_num):
-                        course = ",".join(split_courses[i: i+course_split_num])
-                        courses.append(course)
-                    for course_chunk in courses:
-                        # Cleaning leading whitespaces
-                        course_chunk = course_chunk.lstrip()
-                        if course_chunk.strip() != "":
-                            major_courses.append(concentration + " Required Courses: " + course_chunk)
-                else:
-                    if chunked_course.strip() != "":
-                        major_courses.append(concentration + " Required Courses: " + chunked_course)
-        else:
+        # Stout core classes
+        major_courses.append(program_name + " " + courses_chunks[0])
 
-            if description.strip() != "":
-                major_descriptions.append(row["program_name"] + " Description: " + description)
+        # No leading whitespace
+        major_studies = courses_chunks[1].lstrip()
 
-            courses_chunks = row["required_courses"].split(":.")
+        if len(major_studies) > description_check:
+            split_courses = major_studies.split(":")
 
-            for chunked_course in courses_chunks:
+            if len(split_courses) < course_split_num:
+                course_split_num = len(split_courses)//2
+
+            courses = []
+            for i in range(0, len(split_courses), course_split_num):
+                course = ":".join(split_courses[i: i+course_split_num])
+                courses.append(course)
+            for course_chunk in courses:
                 # Cleaning leading whitespaces
-                chunked_course = chunked_course.lstrip()
+                course_chunk = course_chunk.lstrip()
+                if course_chunk.strip() != "":
+                    major_courses.append(program_name + " Major Required Courses: " + course_chunk)
+        else:
+            if major_studies.strip() != "":
+                major_courses.append(program_name + " Major Required Courses: " + major_studies)
 
-                if len(chunked_course) > description_check:
-                    split_courses = chunked_course.split(",")
-                    courses = []
-                    for i in range(0, len(split_courses), course_split_num):
-                        course = ",".join(split_courses[i: i + course_split_num])
-                        courses.append(course)
-                    for course_chunk in courses:
-                        # Cleaning leading whitespaces
-                        course_chunk = course_chunk.lstrip()
-                        if course_chunk.strip() != "":
-                            major_courses.append(row["program_name"] + " Required Courses: " + course_chunk)
-                else:
-                    if chunked_course.strip() != "":
-                        major_courses.append(row["program_name"] + " Required Courses: " + chunked_course)
+    with open("data/majorCourses.csv", "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        for major_course in major_courses:
+            writer.writerow([major_course])
 
-        with open("data/majorCourses.csv", "w", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            for major_course in major_courses:
-                writer.writerow([major_course])
-
-        with open("data/majorDescriptions.csv", "w", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            for major_description in major_descriptions:
-                writer.writerow([major_description])
+    with open("data/majorDescriptions.csv", "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        for major_description in major_descriptions:
+            writer.writerow([major_description])
 
 
-def preprocess(path1="data/data.csv", path2="data/coursesData.csv",output1='data/embeddings.npy', output2='data/courseEmbeddings.npy'):
+def preprocess(path1="data/majorDescriptions.csv", path2="data/majorCourses.csv",path3="data/coursesData.csv",output1='data/majorDescriptionsEmbeddings.npy',output2='data/majorCoursesEmbeddings', output3='data/courseEmbeddings.npy'):
     embedding_model = SentenceTransformer("BAAI/bge-large-en-v1.5")
     strings1 = read_data(path1)
     strings2 = read_data(path2)
+    strings3 = read_data(path3)
+
     embeddings1 = embedding_model.encode(strings1, normalize_embeddings=True)
     embeddings2 = embedding_model.encode(strings2, normalize_embeddings=True)
+    embeddings3 = embedding_model.encode(strings3, normalize_embeddings=True)
+
     np.save(output1, embeddings1)
     np.save(output2, embeddings2)
+    np.save(output3, embeddings3)
         
 if __name__ == '__main__':
     chunk_data()

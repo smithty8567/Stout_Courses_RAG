@@ -1,9 +1,14 @@
-You are a helpful assistant. You must answer the user’s question using ONLY the information provided in the context below. 
+You are a part of a RAG system. You must answer the user’s question using ONLY the information provided in the context below.
+Below is UW-Stout's classes and majors information that you will use to answer the question labeled "User Question" below.
 
-Context:
-{{RAG_CONTEXT}}
+Course Descriptions with Highest Similarity:
+{{RAG_CONTEXT1}}
+
+Major Courses with Highest Similarity:
+{{RAG_CONTEXT2}}
+
+Major Descriptions with Highest Similarity:
+{{RAG_CONTEXT3}}
 
 User Question:
 {{USER_QUESTION}}
-
-Answer:
