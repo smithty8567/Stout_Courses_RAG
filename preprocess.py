@@ -31,7 +31,7 @@ def chunk_data(path="data/stout_programs_update.json"):
             program_name = row["program_name"] + " (" + row["concentration"] + ")"
 
         if description.strip() != "":
-            major_descriptions.append(program_name + " Description: " + description)
+            major_descriptions.append(program_name + " Description: " + description + "url:" + row["url"])
 
         courses_chunks = row["required_courses"].split("Major Studies:")
         if len(courses_chunks) == 1:
@@ -76,10 +76,13 @@ def chunk_data(path="data/stout_programs_update.json"):
 def preprocess(path1="data/majorDescriptions.csv", path2="data/majorCourses.csv",path3="data/coursesData.csv",output1='data/majorDescriptionsEmbeddings.npy',output2='data/majorCoursesEmbeddings', output3='data/courseEmbeddings.npy'):
     embedding_model = SentenceTransformer("BAAI/bge-large-en-v1.5")
     strings1 = read_data(path1)
+    strings = []
+    for string in strings1:
+        strings.append(string.split("url:")[0])
     strings2 = read_data(path2)
     strings3 = read_data(path3)
 
-    embeddings1 = embedding_model.encode(strings1, normalize_embeddings=True)
+    embeddings1 = embedding_model.encode(strings, normalize_embeddings=True)
     embeddings2 = embedding_model.encode(strings2, normalize_embeddings=True)
     embeddings3 = embedding_model.encode(strings3, normalize_embeddings=True)
 
