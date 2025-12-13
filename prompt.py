@@ -41,7 +41,7 @@ def prompt(input, prompt_path, return_num, embedding_model,
     
 if __name__ == '__main__':
     embedding_model = SentenceTransformer("BAAI/bge-large-en-v1.5", similarity_fn_name=SimilarityFunction.DOT_PRODUCT)
-    prompt_gpt = prompt("What are all classes I need to take Advanced Machine Learning if I come in with 0 credits?", "prompts/detailedPromptInfo.txt", 5, embedding_model)
+    prompt_gpt = prompt("What are the cool things about graph theory?", "prompts/detailedPromptInfo.txt", 5, embedding_model)
     print("Prompt: " + prompt_gpt)
     print("---------------------------------------------------------")
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         client = OpenAI()
 
         response = client.responses.create(
-            model="gpt-5-mini",
+            model="gpt-5.1",
             input=prompt_gpt
         )
 

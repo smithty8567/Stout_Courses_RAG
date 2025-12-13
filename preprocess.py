@@ -57,10 +57,10 @@ def chunk_data(path="data/stout_programs_update.json"):
                 # Cleaning leading whitespaces
                 course_chunk = course_chunk.lstrip()
                 if course_chunk.strip() != "":
-                    major_courses.append(program_name + " Major Required Courses: " + course_chunk)
+                    major_courses.append(program_name + " Major Courses: " + course_chunk)
         else:
             if major_studies.strip() != "":
-                major_courses.append(program_name + " Major Required Courses: " + major_studies)
+                major_courses.append(program_name + " Major Courses: " + major_studies)
 
     with open("data/majorCourses.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
