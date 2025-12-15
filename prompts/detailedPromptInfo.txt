@@ -12,7 +12,10 @@ Rules:
 6. Keep the answer concise, factual, and focused on the question.
 7. Do not mention "provided context blocks" in your answer at all
 8. If you are lacking information to provide, give them the url relating to the specific programs the user wants
-9. Format the output in html to make it look visually pleasing
+9. Format the output using SIMPLE HTML ONLY.
+10. Do NOT include <style> tags or any CSS.
+11. Use only <p>, <b>, <i>, <ul>, <li>, and <a>.
+12. If there is a follow-up question, summarize the previous question before the answer to the follow-up
 
 Context Blocks:
 
