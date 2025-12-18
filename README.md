@@ -4,6 +4,7 @@ This was a 3 week project conducted as a last project for the Advanced Machine L
 Authors: Tyler Smith, Kyler Nikolai, Matthew Peplinski, Aaron Smith
 
 ## What is a RAG
+A RAG leverages existing word imbedding models and LLM's for qurey reasoning and response. External information which an LLM was not trained on is stored in an embedding space using an existing embedding model, which will be accessed by a query. When a query is made, it too is ran through the same embedding model as the external data in order to directly compare embedded information. External information whose embedding is simmilar to the query is retireved, and the information is proveded as an augmentation to the users original query. The then sends the user query and simmilar information to an LLM where the RAG limits the LLM to utilizing only external information provided for response generation. This is used to limit the LLM from halucinating responses, or pulling information from non-authoritative sources. The Response is then provided to the user.
 
 ## Data
 For this project, a major section of the work went into collecting and processing the data. To do this we utilized Beautifulsoup, response, and Selenium for webscraping the UW-Stout bulletin. We collected several types of data which was uitlized by the RAG, and seperated for the purposes of embedding. Data collection for programs was non-trivial due to inconsitent website layout and inconsistent program requirements.
@@ -20,7 +21,16 @@ For this project, a major section of the work went into collecting and processin
  - Major Studies requirements
 
 ## Using Existing Models
+Embedding Model:
+- [BGE v1.5](https://huggingface.co/BAAI/bge-large-en-v1.5)
+- Made specifically for use with RAG's
+- 512 token length limit for embedding
+- - Data chunking is required to adhere to this limit
 
+LLM
+- gpt 5 mini
+- requires use of an OpenAI API key
+- Queries costed less than 1 cent per query
 
 ## GUI
 The base GUI has three main sections;
