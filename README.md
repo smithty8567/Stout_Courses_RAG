@@ -1,7 +1,7 @@
 # Stout_Courses_RAG
 This was a 3 week project conducted as a last project for the Advanced Machine Learning course at UW-Stout. The goal of the project was to create a Retieval Augmented Generator which is capable of answering questions utilizing documents specific to UW-Stout. 
 
-Authors: Tyler Smith, Kyler Nikolai, Matthew Peplinski, Aaron Smith
+ - Authors: Tyler Smith, Kyler Nikolai, Matthew Peplinski, Aaron Smith
 
 ## What is a RAG
 A RAG leverages existing word imbedding models and LLM's for qurey reasoning and response. External information which an LLM was not trained on is stored in an embedding space using an existing embedding model, which will be accessed by a query. When a query is made, it too is ran through the same embedding model as the external data in order to directly compare embedded information. External information whose embedding is simmilar to the query is retireved, and the information is proveded as an augmentation to the users original query. The then sends the user query and simmilar information to an LLM where the RAG limits the LLM to utilizing only external information provided for response generation. This is used to limit the LLM from halucinating responses, or pulling information from non-authoritative sources. The Response is then provided to the user.
