@@ -23,9 +23,8 @@ For this project, a major section of the work went into collecting and processin
 ## Using Existing Models
 Embedding Model:
 - [BGE v1.5](https://huggingface.co/BAAI/bge-large-en-v1.5)
-- Made specifically for use with RAG's
-- 512 token length limit for embedding
--- Data chunking is required to adhere to this limit
+- Embedding models made specifically for use with RAG's
+- Data chunking is required to adhere to 512 token length limit for embedding
 
 LLM
 - gpt 5 mini
