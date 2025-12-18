@@ -1,4 +1,0 @@
-{{USER_QUESTION}}
-
-Here is some more information from the university of Wisconsin Stout
-{{RAG_CONTEXT}}
